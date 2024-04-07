@@ -1,0 +1,25 @@
+version: '3.4'
+
+networks:
+  minhaAppNetwork:
+
+services:
+  SqlServerDb:
+       container_name: SqlServerContainer
+       image: mcr.microsoft.com/mssql/server:2022-latest
+       ports:
+        - 8002:1433
+       environment:
+           - ACCEPT_EULA=Y
+           - MSSQL_SA_PASSWORD=123@Mudar
+
+  blazorsqlserver:
+    container_name: BlazorContainer
+    image: ${DOCKER_REGISTRY-}blazordockerdemo
+    ports:
+        - 8001:8089
+    build:
+      context: .
+      dockerfile: BlazorSQLServer/Dockerfile
+    depends_on:
+     - SqlServerDb
